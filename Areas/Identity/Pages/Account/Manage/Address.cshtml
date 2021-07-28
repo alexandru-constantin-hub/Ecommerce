@@ -1,0 +1,95 @@
+﻿@page
+@model AddressModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h4>@ViewData["Title"]</h4>
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" method="post">
+            <div class="form-group">
+                <label asp-for="Input.InvoiceStreet"></label>
+                <input asp-for="Input.InvoiceStreet" class="form-control" />
+                <span asp-validation-for="Input.InvoiceStreet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.InvoiceStreetNumber"></label>
+                <input asp-for="Input.InvoiceStreetNumber" class="form-control" />
+                <span asp-validation-for="Input.InvoiceStreetNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.InvoiceApartmentNumber"></label>
+                <input asp-for="Input.InvoiceApartmentNumber" class="form-control" />
+                <span asp-validation-for="Input.InvoiceApartmentNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.InvoiceZipCode"></label>
+                <input asp-for="Input.InvoiceZipCode" class="form-control" />
+                <span asp-validation-for="Input.InvoiceZipCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.InvoiceLocality"></label>
+                <input asp-for="Input.InvoiceLocality" class="form-control" />
+                <span asp-validation-for="Input.InvoiceLocality" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.InvoiceProvince"></label>
+                <input asp-for="Input.InvoiceProvince" class="form-control" />
+                <span asp-validation-for="Input.InvoiceProvince" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.InvoiceCountry"></label>
+                <input asp-for="Input.InvoiceCountry" class="form-control" />
+                <span asp-validation-for="Input.InvoiceCountry" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.IsDelivery"></label>
+                <input asp-for="Input.IsDelivery" class="form-control" />
+                <span asp-validation-for="Input.IsDelivery" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DeliveryStreet"></label>
+                <input asp-for="Input.DeliveryStreet" class="form-control" />
+                <span asp-validation-for="Input.DeliveryStreet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DeliveryStreetNumber"></label>
+                <input asp-for="Input.DeliveryStreetNumber" class="form-control" />
+                <span asp-validation-for="Input.DeliveryStreetNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DeliveryApartmentNumber"></label>
+                <input asp-for="Input.DeliveryApartmentNumber" class="form-control" />
+                <span asp-validation-for="Input.DeliveryApartmentNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DeliveryZipCode"></label>
+                <input asp-for="Input.DeliveryZipCode" class="form-control" />
+                <span asp-validation-for="Input.DeliveryZipCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DeliveryLocality"></label>
+                <input asp-for="Input.DeliveryLocality" class="form-control" />
+                <span asp-validation-for="Input.DeliveryLocality" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DeliveryProvince"></label>
+                <input asp-for="Input.DeliveryProvince" class="form-control" />
+                <span asp-validation-for="Input.DeliveryProvince" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DeliveryCountry"></label>
+                <input asp-for="Input.DeliveryCountry" class="form-control" />
+                <span asp-validation-for="Input.DeliveryCountry" class="text-danger"></span>
+            </div>
+
+            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

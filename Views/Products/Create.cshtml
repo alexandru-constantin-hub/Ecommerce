@@ -1,0 +1,95 @@
+﻿@model EShop1.Models.Product
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        console.log("Is Loaded")
+        $('#cboModelId').on('change',function () {
+                console.debug("Change");
+                var url = '@Url.Content("~/")' + "Products/GetBrands";
+            var ddlsource = "#cboModelId";
+                $.getJSON(url, { modelID: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $("#BrandID").empty();
+                    $.each(data, function (i, subcategory) {
+                        items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>";
+                    });
+                    $('#BrandID').html(items);
+                });
+            });
+        });
+</script>
+
+<h1>Create</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModelProductId" class="control-label"></label>
+                <select id="cboModelId" asp-for="ModelProductId" class="form-control" asp-items="ViewBag.ModelProductId"></select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Brand</label>
+                <select id="BrandID" name="BrandID" class="form-control" asp-items="@(new SelectList(string.Empty,"SubCategoryID", "SubCategoryName"))"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Size" class="control-label"></label>
+                <input asp-for="Size" class="form-control" />
+                <span asp-validation-for="Size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BarCode" class="control-label"></label>
+                <input asp-for="BarCode" class="form-control" />
+                <span asp-validation-for="BarCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceReceived" class="control-label"></label>
+                <input asp-for="PriceReceived" class="form-control" />
+                <span asp-validation-for="PriceReceived" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EntryDate" class="control-label"></label>
+                <input asp-for="EntryDate" class="form-control" />
+                <span asp-validation-for="EntryDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantiy" class="control-label"></label>
+                <input asp-for="Quantiy" class="form-control" />
+                <span asp-validation-for="Quantiy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
