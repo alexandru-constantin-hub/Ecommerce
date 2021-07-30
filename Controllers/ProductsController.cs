@@ -19,10 +19,20 @@ namespace Ecommerce.Controllers
             _context = context;
         }
 
+        public JsonResult GetBrands(int modelID)
+        {
+
+            ViewData["Brand"] = new SelectList(_context.Models.Where(m => m.ModelProductId == modelID).Select(m => m.Brand), "BrandId", "Name");
+
+            return Json(ViewData["Brand"]);
+
+        }
+
+
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Products.Include(p => p.ModelProduct);
+            var applicationDbContext = _context.Products.Include(p => p.Category).Include(p => p.ModelProduct);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,6 +45,7 @@ namespace Ecommerce.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.Category)
                 .Include(p => p.ModelProduct)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
@@ -48,18 +59,11 @@ namespace Ecommerce.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            ViewData["CategoryId"] = new MultiSelectList(_context.Categorys, "CategoryId", "Name");
             ViewData["ModelProductId"] = new SelectList(_context.Models, "ModelProductId", "ModelProductId");
             ViewData["Brand"] = new SelectList(string.Empty, "BrandId", "Name");
+
             return View();
-        }
-
-        public JsonResult GetBrands(int modelID)
-        {
-
-            ViewData["Brand"] = new SelectList(_context.Models.Where(m => m.ModelProductId == modelID).Select(m => m.Brand), "BrandId", "Name");
-
-            return Json(ViewData["Brand"]);
-
         }
 
         // POST: Products/Create
@@ -67,7 +71,7 @@ namespace Ecommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Name,ModelProductId,Size,Description,BarCode,Code,PriceReceived,EntryDate,Quantiy")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,Name,ModelProductId,CategoryId,Size,Description,BarCode,Code,PriceReceived,EntryDate,Quantiy,ImageLink")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -75,6 +79,7 @@ namespace Ecommerce.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categorys, "CategoryId", "CategoryId", product.CategoryId);
             ViewData["ModelProductId"] = new SelectList(_context.Models, "ModelProductId", "ModelProductId", product.ModelProductId);
             return View(product);
         }
@@ -92,6 +97,7 @@ namespace Ecommerce.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categorys, "CategoryId", "CategoryId", product.CategoryId);
             ViewData["ModelProductId"] = new SelectList(_context.Models, "ModelProductId", "ModelProductId", product.ModelProductId);
             return View(product);
         }
@@ -101,7 +107,7 @@ namespace Ecommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,ModelProductId,Size,Description,BarCode,Code,PriceReceived,EntryDate,Quantiy")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,ModelProductId,CategoryId,Size,Description,BarCode,Code,PriceReceived,EntryDate,Quantiy,ImageLink")] Product product)
         {
             if (id != product.ProductId)
             {
@@ -128,6 +134,7 @@ namespace Ecommerce.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categorys, "CategoryId", "CategoryId", product.CategoryId);
             ViewData["ModelProductId"] = new SelectList(_context.Models, "ModelProductId", "ModelProductId", product.ModelProductId);
             return View(product);
         }
@@ -141,6 +148,7 @@ namespace Ecommerce.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.Category)
                 .Include(p => p.ModelProduct)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)

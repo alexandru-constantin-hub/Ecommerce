@@ -4,20 +4,37 @@ using Ecommerce.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ecommerce.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210729032555_Roles")]
+    partial class Roles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("CategoryProduct", b =>
+                {
+                    b.Property<int>("CategoriesCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductsProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoriesCategoryId", "ProductsProductId");
+
+                    b.HasIndex("ProductsProductId");
+
+                    b.ToTable("CategoryProduct");
+                });
 
             modelBuilder.Entity("EShop1.Models.Brand", b =>
                 {
@@ -82,9 +99,6 @@ namespace Ecommerce.Data.Migrations
                     b.Property<string>("BarCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
@@ -93,9 +107,6 @@ namespace Ecommerce.Data.Migrations
 
                     b.Property<DateTime>("EntryDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageLink")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ModelProductId")
                         .HasColumnType("int");
@@ -114,26 +125,24 @@ namespace Ecommerce.Data.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("ModelProductId");
 
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("EShop1.Models.RoleAdmin", b =>
+            modelBuilder.Entity("EShop1.Models.Role", b =>
                 {
-                    b.Property<int>("RoleAdminId")
+                    b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("RoleAdminName")
+                    b.Property<string>("RoleName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("RoleAdminId");
+                    b.HasKey("RoleId");
 
-                    b.ToTable("RoleAdmins");
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("EShop1.Models.SellPrice", b =>
@@ -416,6 +425,21 @@ namespace Ecommerce.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("CategoryProduct", b =>
+                {
+                    b.HasOne("EShop1.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EShop1.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EShop1.Models.ModelProduct", b =>
                 {
                     b.HasOne("EShop1.Models.Brand", "Brand")
@@ -429,19 +453,11 @@ namespace Ecommerce.Data.Migrations
 
             modelBuilder.Entity("EShop1.Models.Product", b =>
                 {
-                    b.HasOne("EShop1.Models.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EShop1.Models.ModelProduct", "ModelProduct")
                         .WithMany("Products")
                         .HasForeignKey("ModelProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
 
                     b.Navigation("ModelProduct");
                 });
@@ -511,11 +527,6 @@ namespace Ecommerce.Data.Migrations
             modelBuilder.Entity("EShop1.Models.Brand", b =>
                 {
                     b.Navigation("ModelProducts");
-                });
-
-            modelBuilder.Entity("EShop1.Models.Category", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("EShop1.Models.ModelProduct", b =>

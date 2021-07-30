@@ -10,10 +10,10 @@ namespace EShop1.Models
     public class Category
     {
 
-        public Category()
-        {
-            this.Products = new HashSet<Product>();
-        }
+  //      public Category()
+  //      {
+   //         this.Products = new HashSet<Product>();
+ //       }
        
         public int CategoryId { get; set; }
 
@@ -21,6 +21,6 @@ namespace EShop1.Models
 
         public string Description { get; set; }
 
-        public virtual ICollection<Product> Products { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

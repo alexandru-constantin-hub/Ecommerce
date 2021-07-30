@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EShop1.Models;
 using Ecommerce.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ecommerce.Controllers
 {
@@ -20,12 +21,14 @@ namespace Ecommerce.Controllers
         }
 
         // GET: Categories
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Categorys.ToListAsync());
         }
 
         // GET: Categories/Details/5
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,6 +47,7 @@ namespace Ecommerce.Controllers
         }
 
         // GET: Categories/Create
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +58,7 @@ namespace Ecommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+  //      [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Create([Bind("CategoryId,Name,Description")] Category category)
         {
             if (ModelState.IsValid)
@@ -66,6 +71,7 @@ namespace Ecommerce.Controllers
         }
 
         // GET: Categories/Edit/5
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +92,7 @@ namespace Ecommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryId,Name,Description")] Category category)
         {
             if (id != category.CategoryId)
@@ -117,6 +124,7 @@ namespace Ecommerce.Controllers
         }
 
         // GET: Categories/Delete/5
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +145,7 @@ namespace Ecommerce.Controllers
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Categorys.FindAsync(id);

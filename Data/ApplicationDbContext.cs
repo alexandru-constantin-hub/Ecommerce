@@ -13,6 +13,7 @@ namespace Ecommerce.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
@@ -21,5 +22,6 @@ namespace Ecommerce.Data
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<ModelProduct> Models { get; set; }
         public virtual DbSet<SellPrice> SellPrices { get; set; }
+        public virtual DbSet<RoleAdmin> RoleAdmins { get; set; }
     }
 }

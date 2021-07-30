@@ -12,10 +12,10 @@ namespace EShop1.Models
 
         {
 
-            public Product()
-        {
-            this.Categories = new HashSet<Category>();
-        }
+ //           public Product()
+ //       {
+ //           this.Categories = new HashSet<Category>();
+ //       }
 
             [Key]
             public int ProductId { get; set; }
@@ -25,7 +25,10 @@ namespace EShop1.Models
            public int ModelProductId { get; set; }
            public ModelProduct ModelProduct { get; set; }
 
-            public string Size { get; set; }
+           public int CategoryId { get; set; }
+            public Category Category { get; set; }
+
+        public string Size { get; set; }
 
             public string Description { get; set; }
 
@@ -41,8 +44,13 @@ namespace EShop1.Models
 
             public int Quantiy { get; set; }
 
-            public virtual ICollection<Category> Categories { get; set; }
+            public string ImageLink { get; set; }
+
+  //          public virtual ICollection<Category> Categories { get; set; }
             public List<SellPrice> SellPrices { get; set; }
+
+
+
 
 
     }

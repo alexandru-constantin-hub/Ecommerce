@@ -19,6 +19,9 @@
                 @Html.DisplayNameFor(model => model.ModelProduct)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Size)
             </th>
             <th>
@@ -39,6 +42,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Quantiy)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageLink)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -50,6 +56,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ModelProduct.ModelProductId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.CategoryId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Size)
@@ -71,6 +80,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantiy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageLink)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EShop1.Models;
 using Ecommerce.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ecommerce.Controllers
 {
@@ -20,6 +21,7 @@ namespace Ecommerce.Controllers
         }
 
         // GET: ModelProducts
+       // [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Models.Include(m => m.Brand);
@@ -27,6 +29,7 @@ namespace Ecommerce.Controllers
         }
 
         // GET: ModelProducts/Details/5
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,6 +49,7 @@ namespace Ecommerce.Controllers
         }
 
         // GET: ModelProducts/Create
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public IActionResult Create()
         {
             ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId");
@@ -57,6 +61,7 @@ namespace Ecommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Create([Bind("ModelProductId,ModelProductName,BrandId")] ModelProduct modelProduct)
         {
             if (ModelState.IsValid)
@@ -70,6 +75,7 @@ namespace Ecommerce.Controllers
         }
 
         // GET: ModelProducts/Edit/5
+     //   [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,6 +97,7 @@ namespace Ecommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+     //   [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("ModelProductId,ModelProductName,BrandId")] ModelProduct modelProduct)
         {
             if (id != modelProduct.ModelProductId)
@@ -123,6 +130,7 @@ namespace Ecommerce.Controllers
         }
 
         // GET: ModelProducts/Delete/5
+      //  [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +152,7 @@ namespace Ecommerce.Controllers
         // POST: ModelProducts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+     //   [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var modelProduct = await _context.Models.FindAsync(id);

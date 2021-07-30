@@ -7,29 +7,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EShop1.Models;
 using Ecommerce.Data;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Ecommerce.Controllers
 {
-    public class SellPricesController : Controller
+    public class RoleAdminsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SellPricesController(ApplicationDbContext context)
+        public RoleAdminsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: SellPrices
-      //  [Authorize(Roles = "SuperAdmin, Admin")]
+        // GET: RoleAdmins
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SellPrices.Include(s => s.Product);
-            return View(await applicationDbContext.ToListAsync());
+            var rolesDefault = (from role in _context.Roles
+                                select new
+                                {
+                                    RoleAdminId = role.Id,
+                                    RoleAdminName = role.Name
+                                }).ToListAsync();
+            
+            return View(await rolesDefault);
         }
 
-        // GET: SellPrices/Details/5
-     //   [Authorize(Roles = "SuperAdmin, Admin")]
+        // GET: RoleAdmins/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,45 +40,39 @@ namespace Ecommerce.Controllers
                 return NotFound();
             }
 
-            var sellPrice = await _context.SellPrices
-                .Include(s => s.Product)
-                .FirstOrDefaultAsync(m => m.SellPriceId == id);
-            if (sellPrice == null)
+            var roleAdmin = await _context.RoleAdmins
+                .FirstOrDefaultAsync(m => m.RoleAdminId == id);
+            if (roleAdmin == null)
             {
                 return NotFound();
             }
 
-            return View(sellPrice);
+            return View(roleAdmin);
         }
 
-        // GET: SellPrices/Create
-    //    [Authorize(Roles = "SuperAdmin, Admin")]
+        // GET: RoleAdmins/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId");
             return View();
         }
 
-        // POST: SellPrices/Create
+        // POST: RoleAdmins/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-    //    [Authorize(Roles = "SuperAdmin, Admin")]
-        public async Task<IActionResult> Create([Bind("SellPriceId,ProductId,Price,From,Until")] SellPrice sellPrice)
+        public async Task<IActionResult> Create([Bind("RoleAdminId,RoleAdminName")] RoleAdmin roleAdmin)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(sellPrice);
+                _context.Add(roleAdmin);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", sellPrice.ProductId);
-            return View(sellPrice);
+            return View(roleAdmin);
         }
 
-        // GET: SellPrices/Edit/5
-      //  [Authorize(Roles = "SuperAdmin, Admin")]
+        // GET: RoleAdmins/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,24 +80,22 @@ namespace Ecommerce.Controllers
                 return NotFound();
             }
 
-            var sellPrice = await _context.SellPrices.FindAsync(id);
-            if (sellPrice == null)
+            var roleAdmin = await _context.RoleAdmins.FindAsync(id);
+            if (roleAdmin == null)
             {
                 return NotFound();
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", sellPrice.ProductId);
-            return View(sellPrice);
+            return View(roleAdmin);
         }
 
-        // POST: SellPrices/Edit/5
+        // POST: RoleAdmins/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-      //  [Authorize(Roles = "SuperAdmin, Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("SellPriceId,ProductId,Price,From,Until")] SellPrice sellPrice)
+        public async Task<IActionResult> Edit(int id, [Bind("RoleAdminId,RoleAdminName")] RoleAdmin roleAdmin)
         {
-            if (id != sellPrice.SellPriceId)
+            if (id != roleAdmin.RoleAdminId)
             {
                 return NotFound();
             }
@@ -109,12 +104,12 @@ namespace Ecommerce.Controllers
             {
                 try
                 {
-                    _context.Update(sellPrice);
+                    _context.Update(roleAdmin);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SellPriceExists(sellPrice.SellPriceId))
+                    if (!RoleAdminExists(roleAdmin.RoleAdminId))
                     {
                         return NotFound();
                     }
@@ -125,12 +120,10 @@ namespace Ecommerce.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", sellPrice.ProductId);
-            return View(sellPrice);
+            return View(roleAdmin);
         }
 
-        // GET: SellPrices/Delete/5
-    //    [Authorize(Roles = "SuperAdmin, Admin")]
+        // GET: RoleAdmins/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,32 +131,30 @@ namespace Ecommerce.Controllers
                 return NotFound();
             }
 
-            var sellPrice = await _context.SellPrices
-                .Include(s => s.Product)
-                .FirstOrDefaultAsync(m => m.SellPriceId == id);
-            if (sellPrice == null)
+            var roleAdmin = await _context.RoleAdmins
+                .FirstOrDefaultAsync(m => m.RoleAdminId == id);
+            if (roleAdmin == null)
             {
                 return NotFound();
             }
 
-            return View(sellPrice);
+            return View(roleAdmin);
         }
 
-        // POST: SellPrices/Delete/5
+        // POST: RoleAdmins/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-     //   [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var sellPrice = await _context.SellPrices.FindAsync(id);
-            _context.SellPrices.Remove(sellPrice);
+            var roleAdmin = await _context.RoleAdmins.FindAsync(id);
+            _context.RoleAdmins.Remove(roleAdmin);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SellPriceExists(int id)
+        private bool RoleAdminExists(int id)
         {
-            return _context.SellPrices.Any(e => e.SellPriceId == id);
+            return _context.RoleAdmins.Any(e => e.RoleAdminId == id);
         }
     }
 }
