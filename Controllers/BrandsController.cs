@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using EShop1.Models;
 using Ecommerce.Data;
 using Microsoft.AspNetCore.Authorization;
+using PagedList;
 
 namespace Ecommerce.Controllers
 {
@@ -22,9 +23,49 @@ namespace Ecommerce.Controllers
 
         // GET: Brands
       //  [Authorize(Roles = "SuperAdmin, Admin")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
-            return View(await _context.Brands.ToListAsync());
+
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var brands = from b in _context.Brands
+                           select b;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                brands = brands.Where(s => s.Name.Contains(searchString)
+                                       //|| s.FirstMidName.Contains(searchString)
+                                       );
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    brands = brands.OrderByDescending(b => b.Name);
+                    break;
+               
+                default:
+                    brands = brands.OrderBy(b => b.Name);
+                    break;
+            }
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(brands.ToPagedList(pageNumber, pageSize));
+          
         }
 
         // GET: Brands/Details/5
